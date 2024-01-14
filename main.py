@@ -48,7 +48,7 @@ def make_coffee(drink_name, order_ingredients):
     """
     for item in order_ingredients:
         resources[item] -= order_ingredients[item]
-    print(f"Here's your coffee! ☕")
+    print(f"Here's your {drink_name}! ☕")
 
 
 def is_accepted(amount_received, drink_cost):
@@ -67,6 +67,7 @@ def is_accepted(amount_received, drink_cost):
     - Updates the profit variable.
     """
     if amount_received < drink_cost:
+        print("Insufficient Funds. Refunded.")
         return False
     else:
         change = round(amount_received - drink_cost, 2)
@@ -114,10 +115,9 @@ def is_enough(order_ingredient):
     """
     for item in order_ingredient:
         if resources[item] < order_ingredient[item]:
-            print(f"Sorry, not enough ingredients.")
-            break
-
-    print("Working on order...")
+            print(f"Sorry, not enough {item}.")
+            return False
+    return True
 
 
 is_on = True
@@ -125,12 +125,14 @@ while is_on:
     choice = input("What would you like? (espresso/latte/cappuccino) ").lower()
     if choice == "off":
         is_on = False
-    elif choice == "report":
+
+    if choice == "report":
         print(f"Water: {resources['water']}ml")
         print(f"Milk: {resources['milk']}ml")
         print(f"Coffee: {resources['coffee']}g")
         print(f"Price: ${profit}")
-    elif choice in MENU:
+
+    if choice in MENU:
         drink = MENU[choice]
         if is_enough(drink['ingredients']):
             payment = process()
